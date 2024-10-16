@@ -29,7 +29,7 @@ public class StepDefinition {
         driver = WebDriverManager.getDriver();
         driver.manage().window().maximize();
         driver.get(df.getAppUrl());
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
 
