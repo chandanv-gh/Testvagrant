@@ -1,4 +1,4 @@
-name: Maven CI
+name: Maven CI with Cucumber
 
 on:
   push:
@@ -10,8 +10,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest  # Specify the operating system
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
 
     steps:
       - name: Checkout code
@@ -20,15 +19,23 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'  # Specify the JDK version (11, 8, etc.)
+          java-version: '11'  # Specify the JDK version
           distribution: 'temurin'  # Use Adoptium's Temurin JDK
 
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Build with Maven
-        run: mvn clean install  # Run Maven commands
+        run: mvn clean install  # Build the project
 
-      - name: Run tests
-        run: mvn test  # Run tests (optional if already included in build step)
+      - name: Run Cucumber tests
+        run: mvn test  # Run tests with Cucumber
 
-      # Optional: Deploy to a server or another service
+      # Optional: You can add a step to deploy your application if needed
       # - name: Deploy
-      #   run: ./deploy_script.sh  # Your deployment script
+      #   run: ./deploy_script.sh  # Replace with your deployment command
