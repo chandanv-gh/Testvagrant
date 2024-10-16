@@ -5,16 +5,16 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        features = "src/main/resources/Features",
+        features = "src/main/resources/Features/Test2.feature",
         glue = "com.testvagrant.stepdef",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true
 )
-public class Executor extends AbstractTestNGCucumberTests {
-    // This class remains empty, the execution is handled by TestNG
+public class Test2Runner extends AbstractTestNGCucumberTests {
     @Override
-    @DataProvider(parallel=false)
+    @DataProvider(parallel=true)
     public Object[][] scenarios() {
         return super.scenarios();
     }
 }
+

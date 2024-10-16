@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Map;
 
-public class JsonReader {
+public class JsonData {
     private Map<String, Map<String, String>> data;
-    public JsonReader(String filePath) {
+    public JsonData(String filePath) {
         try (Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filePath))) {
             data = new Gson().fromJson(reader, new TypeToken<Map<String, Map<String, String>>>() {}.getType());
         } catch (Exception e) {

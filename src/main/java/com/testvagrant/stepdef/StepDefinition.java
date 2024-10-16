@@ -2,18 +2,24 @@ package com.testvagrant.stepdef;
 
 import com.testvagrant.appGenericFunction.DataFunc;
 import com.testvagrant.utils.WebDriverManager;
+import dev.failsafe.internal.util.Assert;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 public class StepDefinition {
     DataFunc df = new DataFunc();
     private WebDriver driver;
+    private WebDriverWait wait;
     private String username = "Test"+RandomStringUtils.random(5, 'a', 'z');
     private String password = RandomStringUtils.random(10, 'a', 'z');
 
@@ -23,6 +29,7 @@ public class StepDefinition {
         driver = WebDriverManager.getDriver();
         driver.manage().window().maximize();
         driver.get(df.getAppUrl());
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
 
@@ -46,6 +53,8 @@ public class StepDefinition {
         }
         driver.findElement(By.xpath("//input[contains(@id,'username')]")).sendKeys(username);
         driver.findElement(By.xpath("//input[contains(@id,'password')]")).sendKeys(password);
+        df.updateJsonFile("registration", "username", username);
+        df.updateJsonFile("registration", "password", password);
         driver.findElement(By.xpath(df.getXpath("confirmPassword"))).sendKeys(password);
     }
     @Then("click on {string} button")
@@ -54,7 +63,7 @@ public class StepDefinition {
     }
     @Then("I should see the {string} message")
     public void i_should_see_the_message(String msg) {
-        driver.findElement(By.xpath(df.getXpath(msg.toLowerCase()))).isDisplayed();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(df.getXpath(msg.toLowerCase()))));
     }
 
 
@@ -64,8 +73,8 @@ public class StepDefinition {
         String username = "";
         String password = "";
         if(user.equals("Registered")) {
-            username = this.username;
-            password = this.password;
+            username = df.getTestData(in[0].toLowerCase());
+            password = df.getTestData(in[1].toLowerCase());
         }
         driver.findElement(By.xpath(df.getXpath(in[0].toLowerCase()))).sendKeys(username);
         driver.findElement(By.xpath(df.getXpath(in[1].toLowerCase()))).sendKeys(password);
@@ -73,7 +82,7 @@ public class StepDefinition {
 
     @Then("I validate the {string} of the logged in user")
     public void i_validate_the_of_the_logged_in_user(String string) {
-        driver.findElement(By.xpath("//p[contains(text(),'"+df.getTestData("firstName")+" "+df.getTestData("lastName")+"')]")).isDisplayed();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[contains(text(),'"+df.getTestData("firstName")+" "+df.getTestData("lastName")+"')]")));
     }
 
     @After
