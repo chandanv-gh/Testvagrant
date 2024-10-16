@@ -49,7 +49,7 @@ public class DataFunc {
 
     public void updateJsonFile(String object, String key, String value) {
         Gson gson = new Gson();
-        String jsonFile = "/Users/testvagrant/IdeaProjects/TestProject/src/main/resources/Data/testData.json";
+        String jsonFile = System.getProperty("user.dir")+"/src/main/resources/Data/testData.json";
 
         try (JsonReader reader = new JsonReader(new FileReader(jsonFile))) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
