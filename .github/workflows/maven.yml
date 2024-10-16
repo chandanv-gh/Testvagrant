@@ -8,7 +8,7 @@ on:
     branches:
       - main  # Trigger on pull requests to the main branch
   schedule:
-    - cron: '12 0 * * *'  # This means it will run every day at midnight UTC
+    - cron: '12 0 * * *'  # This means it will run every day at 12PM UTC -> 5:30PM IST
 
 jobs:
   build:
