@@ -1,0 +1,34 @@
+name: Maven CI
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests to the main branch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest  # Specify the operating system
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Specify the JDK version (11, 8, etc.)
+          distribution: 'temurin'  # Use Adoptium's Temurin JDK
+
+      - name: Build with Maven
+        run: mvn clean install  # Run Maven commands
+
+      - name: Run tests
+        run: mvn test  # Run tests (optional if already included in build step)
+
+      # Optional: Deploy to a server or another service
+      # - name: Deploy
+      #   run: ./deploy_script.sh  # Your deployment script
