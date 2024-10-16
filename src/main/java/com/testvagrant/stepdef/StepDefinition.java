@@ -85,6 +85,15 @@ public class StepDefinition {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[contains(text(),'"+df.getTestData("firstName")+" "+df.getTestData("lastName")+"')]")));
     }
 
+    @Given("I validate all the elements in the {string} page")
+    public void i_validate_all_the_elements_in_the_page(String page) {
+        List<String> testElements = df.getList(page);
+        for(String ele:testElements) {
+            driver.findElement(By.xpath("//a[text()='"+ele+"']")).isDisplayed();
+        }
+    }
+
+
     @After
     public void endTest() {
         WebDriverManager.quitDriver();

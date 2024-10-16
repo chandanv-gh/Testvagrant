@@ -13,3 +13,7 @@ Feature: Registration and Login
     Given I enter "Username,Password" of the "Registered" user
     And click on "Login" button
     Then I validate the "FullName" of the logged in user
+
+  @Home
+  Scenario: Validate all the elements in the homepage
+    Given I validate all the elements in the "Home" page

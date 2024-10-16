@@ -4,35 +4,50 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.testvagrant.json.JsonData;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.JsonNode;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.core.internal.com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataFunc {
 
-    public String testDataFile = "Data/testData.json";
-    JsonData json = new JsonData(testDataFile);
-    Map<String, Map<String, String>> data = json.getData();
+    public String jsonFile = System.getProperty("user.dir")+"/src/main/resources/Data/testData.json";
+    public ObjectMapper objectMapper = new ObjectMapper();
+    private JsonNode rootNode;
+
+    public DataFunc() {
+        try {
+            // Load JSON from file
+            rootNode = objectMapper.readTree(new File(jsonFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public String getXpath(String key) {
-        String x = data.get("xpath").get(key);
+        String x = rootNode.path("xpath").path(key).asText();
         return x;
     }
 
     public String getTestData(String key) {
-        return data.get("registration").get(key);
+        return rootNode.path("registration").path(key).asText();
     }
 
     public String getAppUrl() {
-        return data.get("common_properties").get("url");
+        return rootNode.path("common_properties").path("url").asText();
+    }
+
+    public List<String> getList(String key) {
+        List<String> node = new ArrayList<>();
+        for(JsonNode i:rootNode.path(key)) {
+            node.add(i.asText());
+        }
+        return node;
     }
 
     public String generateRandomText(int size) {
@@ -49,7 +64,6 @@ public class DataFunc {
 
     public void updateJsonFile(String object, String key, String value) {
         Gson gson = new Gson();
-        String jsonFile = System.getProperty("user.dir")+"/src/main/resources/Data/testData.json";
 
         try (JsonReader reader = new JsonReader(new FileReader(jsonFile))) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
