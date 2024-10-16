@@ -9,6 +9,7 @@ on:
       - main  # Trigger on pull requests to the main branch
   schedule:
     - cron: '12 0 * * *'  # This means it will run every day at 12PM UTC -> 5:30PM IST
+  workflow_dispatch:  # This allows manual triggering
 
 jobs:
   build:
