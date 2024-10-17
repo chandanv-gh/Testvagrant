@@ -2,6 +2,7 @@ package com.testvagrant.executor;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
         features = "src/main/resources/Features/Test1.feature",
@@ -10,6 +11,10 @@ import io.cucumber.testng.CucumberOptions;
         monochrome = true
 )
 public class Test1Runner extends AbstractTestNGCucumberTests {
-    // This will run Test1.feature scenarios sequentially
+    @Override
+    @DataProvider(parallel=true)
+    public Object[][] scenarios() {
+        return super.scenarios();
+    }
 }
 

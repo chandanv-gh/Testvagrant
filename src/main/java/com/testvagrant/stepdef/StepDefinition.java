@@ -1,69 +1,109 @@
 package com.testvagrant.stepdef;
 
+import com.testvagrant.appGenericFunction.AppGenericFunc;
 import com.testvagrant.appGenericFunction.DataFunc;
 import com.testvagrant.utils.WebDriverManager;
-import dev.failsafe.internal.util.Assert;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.*;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 public class StepDefinition {
     DataFunc df = new DataFunc();
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private String username = "Test"+RandomStringUtils.random(5, 'a', 'z');
-    private String password = RandomStringUtils.random(10, 'a', 'z');
+    AppGenericFunc appGenFunc = new AppGenericFunc();
+    String username;
+    String password;
 
 
-    @Given("I launch the browser and navigate to the application url")
-    public void i_launch_the_browser_and_navigate_to_the_application_url() {
-        driver = WebDriverManager.getDriver();
-        driver.manage().window().maximize();
-        driver.get(df.getAppUrl());
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+    @Given("I launch the browser")
+    public void i_launch_the_browser() {
+        appGenFunc.launchBrowser();
     }
 
-
-    @When("I click on {string}")
-    public void i_click_on(String string) {
-        driver.findElement(By.xpath("//a[text()='Register']")).click();
+    @Given("I am on the {string} homepage")
+    public void i_am_on_the_homepage(String app) {
+        appGenFunc.launchUrl(df.getAppUrl(app));
     }
 
-    @Then("I enter all the required details")
-    public void i_enter_all_the_required_details(DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        List<String> data = dataTable.asList();
-        for(String d:data) {
-            driver.findElement(By.xpath("//input[contains(@id,'"+d+"')]")).sendKeys(df.getTestData(d));
+    @When("I click on the {string} link")
+    public void i_click_on_the_link(String text) {
+        appGenFunc.clickOnAnchorTag(text);
+    }
+
+    @When("I fill in {string} with {string}")
+    public void i_fill_in_with(String field, String input) {
+        if(input.equals("testData")) {
+            input = df.getTestData(field);
         }
-        driver.findElement(By.xpath("//input[contains(@id,'username')]")).sendKeys(username);
-        driver.findElement(By.xpath("//input[contains(@id,'password')]")).sendKeys(password);
-        df.updateJsonFile("registration", "username", username);
-        df.updateJsonFile("registration", "password", password);
-        driver.findElement(By.xpath(df.getXpath("confirmPassword"))).sendKeys(password);
+        if(field.equals("Confirm Password")) {
+            input = df.getTestData("Password");
+        }
+        appGenFunc.setText(df.getXpath(field), input);
+    }
+
+    @When("I enter {string} as the {string}")
+    public void i_enter_as_the_username(String input, String field) {
+        if(input.equals("testData")) {
+            input = df.getTestData(field);
+        }
+        appGenFunc.setText(By.xpath("//input[@name='"+field.toLowerCase()+"']"), input);
+    }
+
+    @When("I click the {string} button")
+    public void i_click_the_button(String button) {
+        appGenFunc.clickOnButton(df.getXpath(button));
+    }
+
+    @Then("I autogenerate {string} and {string}")
+    public void i_autogenerate_and(String string, String string2) {
+        username = UUID.randomUUID().toString().substring(0, 10);
+        password = UUID.randomUUID().toString().substring(0, 8);
+        df.updateJsonFile("registration", "Username", username);
+        df.updateJsonFile("registration", "Password", password);
+        df = new DataFunc();
+    }
+
+    @Then("I should see a confirmation message {string}")
+    public void i_should_see_a_confirmation_message(String expectedMsg) {
+        String actualMsg = appGenFunc.checkElementVisibility(df.getXpath("success"));
+        if(actualMsg.contains(expectedMsg)) {
+            System.out.println("Successfully Registered");
+        }
+        else {
+            System.out.println("Registration is Unsuccessful");
+        }
+    }
+
+    @When("I leave {string} blank")
+    public void i_leave_blank(String textBox) {
+        appGenFunc.setText(df.getXpath(textBox), "");
+    }
+
+    @Then("I should see an error message {string}")
+    public void i_should_see_an_error_message(String expectedError) {
+        appGenFunc.checkElementVisibility(By.xpath("//*[text()='"+expectedError+"']"));
+    }
+
+    @Then("I should see a welcome message {string}")
+    public void i_should_see_a_welcome_message(String expectedMsg) {
+        String actualMsg = appGenFunc.checkElementVisibility(df.getXpath("welcome"));
+        if(actualMsg.equals(expectedMsg)) {
+            System.out.println("Login successful");
+        }
+        else {
+            System.out.println("Login failed");
+        }
     }
     @Then("click on {string} button")
     public void click_on_button(String button) {
-        driver.findElement(By.xpath(df.getXpath(button))).click();
+        appGenFunc.clickOnButton(df.getXpath(button));
     }
     @Then("I should see the {string} message")
     public void i_should_see_the_message(String msg) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(df.getXpath(msg.toLowerCase()))));
+        appGenFunc.checkElementVisibility(df.getXpath(msg.toLowerCase()));
     }
 
 
@@ -76,20 +116,20 @@ public class StepDefinition {
             username = df.getTestData(in[0].toLowerCase());
             password = df.getTestData(in[1].toLowerCase());
         }
-        driver.findElement(By.xpath(df.getXpath(in[0].toLowerCase()))).sendKeys(username);
-        driver.findElement(By.xpath(df.getXpath(in[1].toLowerCase()))).sendKeys(password);
+        appGenFunc.setText(df.getXpath(in[0].toLowerCase()), username);
+        appGenFunc.setText(df.getXpath(in[1].toLowerCase()), password);
     }
 
     @Then("I validate the {string} of the logged in user")
     public void i_validate_the_of_the_logged_in_user(String string) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[contains(text(),'"+df.getTestData("firstName")+" "+df.getTestData("lastName")+"')]")));
+        appGenFunc.checkElementVisibility(By.xpath("//p[contains(text(),'"+df.getTestData("firstName")+" "+df.getTestData("lastName")+"')]"));
     }
 
     @Given("I validate all the elements in the {string} page")
     public void i_validate_all_the_elements_in_the_page(String page) {
         List<String> testElements = df.getList(page);
         for(String ele:testElements) {
-            driver.findElement(By.xpath("//a[text()='"+ele+"']")).isDisplayed();
+            appGenFunc.checkElementVisibility(By.xpath("//a[text()='"+ele+"']"));
         }
     }
 

@@ -6,16 +6,21 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.JsonNode;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
+import org.openqa.selenium.By;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DataFunc {
 
+    Path path = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "Data", "testData.json");
     public String jsonFile = System.getProperty("user.dir")+"/src/main/resources/Data/testData.json";
     public ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode rootNode;
@@ -23,23 +28,22 @@ public class DataFunc {
     public DataFunc() {
         try {
             // Load JSON from file
-            rootNode = objectMapper.readTree(new File(jsonFile));
+            rootNode = objectMapper.readTree(new File(path.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String getXpath(String key) {
-        String x = rootNode.path("xpath").path(key).asText();
-        return x;
+    public By getXpath(String key) {
+        return By.xpath(rootNode.path("xpath").path(key).asText());
     }
 
     public String getTestData(String key) {
         return rootNode.path("registration").path(key).asText();
     }
 
-    public String getAppUrl() {
-        return rootNode.path("common_properties").path("url").asText();
+    public String getAppUrl(String app) {
+        return rootNode.path("common_properties").path(app).asText();
     }
 
     public List<String> getList(String key) {
@@ -48,18 +52,6 @@ public class DataFunc {
             node.add(i.asText());
         }
         return node;
-    }
-
-    public String generateRandomText(int size) {
-        StringBuilder sb = new StringBuilder(size);
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for (int i = 0; i < size; i++) {
-            int index = (int) (Math.random() * characters.length());
-            sb.append(characters.charAt(index));
-        }
-
-        return sb.toString();
     }
 
     public void updateJsonFile(String object, String key, String value) {
