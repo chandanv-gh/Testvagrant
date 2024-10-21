@@ -1,0 +1,46 @@
+name: Maven CI with Cucumber
+
+on:
+  push:
+    branches:
+      - TestWebFramework  # Trigger on push to the main branch
+      - TestAPIFramework
+  pull_request:
+    branches:
+      - TestWebFramework  # Trigger on pull requests to the main branch
+      - TestAPIFramework
+  schedule:
+    - cron: '12 0 * * *'  # This means it will run every day at 12PM UTC -> 5:30PM IST
+  workflow_dispatch:  # This allows manual triggering
+
+jobs:
+  build:
+    runs-on: windows-latest  # Use the latest Windows environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '23'  # Specify the JDK version
+          distribution: 'temurin'  # Use Adoptium's Temurin JDK
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn clean install  # Build the project
+
+      - name: Run Cucumber tests
+        run: mvn test  # Run tests with Cucumber
+
+      # Optional: You can add a step to deploy your application if needed
+      # - name: Deploy
+      #   run: ./deploy_script.sh  # Replace with your deployment command
