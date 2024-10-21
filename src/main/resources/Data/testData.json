@@ -1,1 +1,49 @@
-{"Home":["About Us","Services","Products","Locations","Admin Page","Forum","Site Map","Contact Us"],"common_properties":{"Parabank":"https://parabank.parasoft.com/parabank/index.htm"},"registration":{"Address":"TestAdd","City":"Bangalore","First Name":"TestAbc","Last Name":"TestXyz","Password":"0fe22973","Phone":"123456789","SSN":"756","State":"Karnataka","Username":"088fb3d5-6","Zip Code":"560003"},"xpath":{"username":"//input[@name\u003d\u0027username\u0027]","password":"//input[@name\u003d\u0027password\u0027]","Address":"//input[@name\u003d\u0027customer.address.street\u0027]","City":"//input[@name\u003d\u0027customer.address.city\u0027]","Confirm Password":"//input[@name\u003d\u0027repeatedPassword\u0027]","First Name":"//input[@name\u003d\u0027customer.firstName\u0027]","Last Name":"//input[@name\u003d\u0027customer.lastName\u0027]","Log In":"//input[@value\u003d\u0027Log In\u0027]","Password":"//input[@name\u003d\u0027customer.password\u0027]","Phone":"//input[@name\u003d\u0027customer.phoneNumber\u0027]","Register":"//input[@value\u003d\u0027Register\u0027]","SSN":"//input[@name\u003d\u0027customer.ssn\u0027]","State":"//input[@name\u003d\u0027customer.address.state\u0027]","Username":"//input[@name\u003d\u0027customer.username\u0027]","Zip Code":"//input[@name\u003d\u0027customer.address.zipCode\u0027]","blankError":"//p[text()\u003d\u0027Please enter a username and password.\u0027]","error":"//p[@class\u003d\u0027error\u0027]","success":"//p[text()\u003d\u0027Your account was created successfully. You are now logged in.\u0027]","useralreadyregistered":"//span[text()\u003d\u0027This username already exists.\u0027]","welcome":"//p[@class\u003d\u0027smallText\u0027]"}}
+{
+  "Home" : [
+    "About Us",
+    "Services",
+    "Products",
+    "Locations",
+    "Admin Page",
+    "Forum",
+    "Site Map",
+    "Contact Us"
+  ],
+  "common_properties" : {
+    "Parabank" : "https://parabank.parasoft.com/parabank/index.htm"
+  },
+  "registration" : {
+    "Address" : "TestAdd",
+    "City" : "Bangalore",
+    "First Name" : "TestAbc",
+    "Last Name" : "TestXyz",
+    "Password" : "0fe22973",
+    "Phone" : "123456789",
+    "SSN" : "756",
+    "State" : "Karnataka",
+    "Username" : "088fb3d5-6",
+    "Zip Code" : "560003"
+  },
+  "xpath" : {
+    "Address" : "//input[@name\u003d\u0027customer.address.street\u0027]",
+    "City" : "//input[@name\u003d\u0027customer.address.city\u0027]",
+    "Confirm Password" : "//input[@name\u003d\u0027repeatedPassword\u0027]",
+    "First Name" : "//input[@name\u003d\u0027customer.firstName\u0027]",
+    "Last Name" : "//input[@name\u003d\u0027customer.lastName\u0027]",
+    "Log In" : "//input[@value\u003d\u0027Log In\u0027]",
+    "Password" : "//input[@name\u003d\u0027customer.password\u0027]",
+    "Phone" : "//input[@name\u003d\u0027customer.phoneNumber\u0027]",
+    "Register" : "//input[@value\u003d\u0027Register\u0027]",
+    "SSN" : "//input[@name\u003d\u0027customer.ssn\u0027]",
+    "State" : "//input[@name\u003d\u0027customer.address.state\u0027]",
+    "Username" : "//input[@name\u003d\u0027customer.username\u0027]",
+    "Zip Code" : "//input[@name\u003d\u0027customer.address.zipCode\u0027]",
+    "blankError" : "//p[text()\u003d\u0027Please enter a username and password.\u0027]",
+    "error" : "//p[@class\u003d\u0027error\u0027]",
+    "password" : "//input[@name\u003d\u0027password\u0027]",
+    "success" : "//p[text()\u003d\u0027Your account was created successfully. You are now logged in.\u0027]",
+    "useralreadyregistered" : "//span[text()\u003d\u0027This username already exists.\u0027]",
+    "username" : "//input[@name\u003d\u0027username\u0027]",
+    "welcome" : "//p[@class\u003d\u0027smallText\u0027]"
+  }
+}

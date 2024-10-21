@@ -21,7 +21,7 @@ import java.util.UUID;
 public class DataFunc {
 
     Path path = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "Data", "testData.json");
-    public String jsonFile = System.getProperty("user.dir")+"/src/main/resources/Data/testData.json";
+    public String jsonFile = path.toString();
     public ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode rootNode;
 
