@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "username": "johnjames",
+    "firstName": "John",
+    "lastName": "James",
+    "email": "john@email.com",
+    "password": "12345",
+    "phone": "9986339"
+  },
+  {
+    "id": 2,
+    "username": "stephenadams",
+    "firstName": "Stephen",
+    "lastName": "Adams",
+    "email": "stephen@email.com",
+    "password": "23456",
+    "phone": "9448710"
+  },
+  {
+    "id": 3,
+    "username": "prashantchavan",
+    "firstName": "Prashant",
+    "lastName": "Chavan",
+    "email": "prashant@email.com",
+    "password": "34567",
+    "phone": "9876543"
+  }
+]
